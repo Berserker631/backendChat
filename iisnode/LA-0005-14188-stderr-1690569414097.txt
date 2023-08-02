@@ -1,0 +1,15 @@
+(node:14188) Warning: Accessing non-existent property 'app' of module exports inside circular dependency
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:14188) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+Application has thrown an uncaught exception and is terminated:
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at new NodeError (node:internal/errors:399:5)
+    at ServerResponse.setHeader (node:_http_outgoing:645:11)
+    at ServerResponse.header (C:\inetpub\wwwroot\appNode\node_modules\express\lib\response.js:794:10)
+    at ServerResponse.send (C:\inetpub\wwwroot\appNode\node_modules\express\lib\response.js:174:12)
+    at sendMessage (C:\inetpub\wwwroot\appNode\controllers\messages.js:46:9)
+    at Layer.handle [as handle_request] (C:\inetpub\wwwroot\appNode\node_modules\express\lib\router\layer.js:95:5)
+    at next (C:\inetpub\wwwroot\appNode\node_modules\express\lib\router\route.js:144:13)
+    at Route.dispatch (C:\inetpub\wwwroot\appNode\node_modules\express\lib\router\route.js:114:3)
+    at Layer.handle [as handle_request] (C:\inetpub\wwwroot\appNode\node_modules\express\lib\router\layer.js:95:5)
+    at C:\inetpub\wwwroot\appNode\node_modules\express\lib\router\index.js:284:15

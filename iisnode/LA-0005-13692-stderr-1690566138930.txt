@@ -1,0 +1,3 @@
+(node:13692) Warning: Accessing non-existent property 'app' of module exports inside circular dependency
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:13692) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
