@@ -17,32 +17,23 @@ const getMessages = async (req, res) => {
 };
 
 const sendMessage = async (req, res) => {
-  let { message, userName, idSession, readMsg, timeReceived } = req.body;
-  console.log(idSession, message, readMsg, timeReceived);
-  //Validating
-  if (message === null || userName === null) {
+  let { Message, UserName, SessionID, ReadMsg, TimeReceived } = req.body;
+  // Validating
+  if (Message === null || UserName === null) {
     return res.status(400).json({ msg: "Bad Request. Please fill al fields" });
-  }
-  if (timeReceived === null) {
-    timeReceived = "00:00";
-  }
-  if (readMsg === null) {
-    readMsg = 0;
   }
   try {
     const pool = await sql.connect(app);
     const result = await pool
       .request()
-      .input("Message", sql.Text, message)
-      .input("TimeReceived", sql.VarChar, timeReceived)
-      .input("SessionID", sql.Int, idSession)
-      .input("UserName", sql.VarChar, userName)
-      .input("ReadMsg", sql.Bit, readMsg)
+      .input("Message", sql.Text, Message)
+      .input("TimeReceived", sql.VarChar, TimeReceived)
+      .input("SessionID", sql.Int, SessionID)
+      .input("UserName", sql.VarChar, UserName)
+      .input("ReadMsg", sql.Bit, ReadMsg)
       .query(querys.sendMessage);
-
-    // res.json({ message, userName });
+    res.end();
   } catch (error) {
-    console.log('checkpoint');
     res.status(500);
     res.send(error.message);
   }
@@ -51,13 +42,21 @@ const sendMessage = async (req, res) => {
 // #region ChatControllers
 
 const getConversation = async (req, res) => {
-  const { idSession } = req.params;
-  const pool = await sql.connect(app);
-  const result = await pool
-    .request()
-    .input("SessionID", idSession)
-    .query(querys.getConversation);
-  res.send(result.recordset);
+  let { Session } = req.body;
+  if (Session === 0 || Session === undefined) {
+    return res.status(400).json({ msg: "Bad Request there was an error" });
+  }
+  try {
+    const pool = await sql.connect(app);
+    const result = await pool
+      .request()
+      .input("Session", sql.Int, Session)
+      .query(querys.getConversation);
+    res.send(result.recordset);
+  } catch (error) {
+    res.status(400);
+    res.send(error.message);
+  }
 };
 
 const deleteMessage = async (req, res) => {

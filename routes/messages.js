@@ -13,7 +13,7 @@ api.get("/getMessages", messagesController.getMessages);
 
 api.post("/sendMessage", messagesController.sendMessage);
 
-api.get("/getConversation/:idSession", messagesController.getConversation);
+api.post("/getConversation", messagesController.getConversation);
 
 api.get("/countMessages/:idSession", messagesController.countMessages);
 

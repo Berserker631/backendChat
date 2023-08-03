@@ -1,7 +1,7 @@
 const querys = {
     getAllMessages: 'SELECT * FROM Conversations',
-    sendMessage: 'INSERT INTO Conversations (Message, TimeReceived, SessionID, UserName, ReadMsg) VALUES (@message, @timeReceived, @idSession, @userName, @readMsg)',
-    getConversation: 'SELECT * FROM  Conversations WHERE SessionID = @IdSession',
+    sendMessage: 'INSERT INTO Conversations (Message, TimeReceived, SessionID, UserName, ReadMsg) VALUES (@Message, CURRENT_TIMESTAMP, @SessionID, @UserName, @ReadMsg)',
+    getConversation: 'SELECT * FROM  Conversations WHERE SessionID = @Session',
     countMessages: 'SELECT COUNT (id) FROM [DB_CHAT].[dbo].[Conversations] WHERE SessionID = @idSession',
     deleteMessage: 'DELETE FROM [DB_CHAT].[dbo].[Conversations] WHERE MessageID = @id',
     updateMessage: 'UPDATE Conversations SET Message = @message FROM [DB_CHAT].[dbo].[Conversations] WHERE MessageID = @id',
