@@ -2,8 +2,6 @@
 const querys = require('./querys/query')
 const sql = require('mssql')
 const { app } = require('../index')
-// import { getConnection, sql, querys } from "../database";
-// import { encrypt, compare } from "../helpers/handleBcrypt";
 
 const getMessages = async (req, res) => {
   try {
@@ -17,8 +15,8 @@ const getMessages = async (req, res) => {
 };
 
 const sendMessage = async (req, res) => {
+  console.log('Enviando mensaje');
   let { Message, UserName, SessionID, ReadMsg, TimeReceived } = req.body;
-  // Validating
   if (Message === null || UserName === null) {
     return res.status(400).json({ msg: "Bad Request. Please fill al fields" });
   }
@@ -26,7 +24,7 @@ const sendMessage = async (req, res) => {
     const pool = await sql.connect(app);
     const result = await pool
       .request()
-      .input("Message", sql.Text, Message)
+      .input("Message", sql.NVarChar, Message)
       .input("TimeReceived", sql.VarChar, TimeReceived)
       .input("SessionID", sql.Int, SessionID)
       .input("UserName", sql.VarChar, UserName)

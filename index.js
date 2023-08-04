@@ -23,9 +23,17 @@ const config = {
   database: "DB_CHAT",
   server: "localhost",
   options: {
-    encrypt: true, // for azure
-    trustServerCertificate: true, // change to true for local dev / self-signed certs
+    encrypt: true,
+    trustServerCertificate: true,
   },
+  // user: "sa",
+  // password: "sa2023",
+  // database: "DB_CHAT",
+  // server: "localhost",
+  // options: {
+  //   encrypt: true, // for azure
+  //   trustServerCertificate: true, // change to true for local dev / self-signed certs
+  // },
 };
 
 async function getConnection() {
@@ -38,7 +46,6 @@ async function getConnection() {
   }
 }
 
-//sql.connect(config);
 getConnection();
 
 module.exports = app;
