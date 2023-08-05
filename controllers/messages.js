@@ -15,13 +15,13 @@ const getMessages = async (req, res) => {
 };
 
 const sendMessage = async (req, res) => {
-  console.log('Enviando mensaje');
   let { Message, UserName, SessionID, ReadMsg, TimeReceived } = req.body;
   if (Message === null || UserName === null) {
     return res.status(400).json({ msg: "Bad Request. Please fill al fields" });
   }
   try {
     const pool = await sql.connect(app);
+    console.log('Enviando mensaje');
     const result = await pool
       .request()
       .input("Message", sql.NVarChar, Message)
