@@ -6,10 +6,10 @@ var messagesController = require("../controllers/messages.js");
 var api = express.Router();
 
 api.get("/", function (req, res) {
-    res.send("<h1>It's working</h1>");
+  res.send("<h1>It's working</h1>");
 });
 
-api.get("/getMessages", messagesController.getMessages);
+api.post("/getMessages", messagesController.getMessages);
 
 api.post("/sendMessage", messagesController.sendMessage);
 

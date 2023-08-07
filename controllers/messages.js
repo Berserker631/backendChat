@@ -1,15 +1,24 @@
 "use strict";
-const querys = require('./querys/query')
-const sql = require('mssql')
-const { app } = require('../index')
+const querys = require("./querys/query");
+const sql = require("mssql");
+const { app } = require("../index");
 // import { getConnection, sql, querys } from "../database";
 // import { encrypt, compare } from "../helpers/handleBcrypt";
 
 const getMessages = async (req, res) => {
+  let { UserID } = req.body;
+  if (UserID === null || UserID === 0) {
+    return res.status(400).json({ msg: "Something went wrong" });
+  }
+
   try {
     const pool = await sql.connect(app);
-    const result = await pool.request().query(querys.getAllMessages);
+    const result = await pool
+      .request()
+      .input("UserID", UserID)
+      .query(querys.getAllMessages);
     res.json(result.recordset);
+    res.end();
   } catch (error) {
     res.status(500);
     res.send(error.message);
@@ -17,7 +26,8 @@ const getMessages = async (req, res) => {
 };
 
 const sendMessage = async (req, res) => {
-  let { Message, UserName, SessionID, ReadMsg, TimeReceived } = req.body;
+  let { Message, UserName, SessionID, ReadMsg, TimeReceived, UserID } =
+    req.body;
   // Validating
   if (Message === null || UserName === null) {
     return res.status(400).json({ msg: "Bad Request. Please fill al fields" });
@@ -31,6 +41,7 @@ const sendMessage = async (req, res) => {
       .input("SessionID", sql.Int, SessionID)
       .input("UserName", sql.VarChar, UserName)
       .input("ReadMsg", sql.Bit, ReadMsg)
+      .input("UserID", sql.Int, UserID)
       .query(querys.sendMessage);
     res.end();
   } catch (error) {
@@ -117,10 +128,9 @@ const getUsers = async (req, res) => {
     const result = await pool
       .request()
       .input("id", id)
-      .query(querys.getAllUsers)
+      .query(querys.getAllUsers);
     res.json(result.recordset);
-  }
-  catch (error) {
+  } catch (error) {
     res.status(400);
     res.send(error.message);
   }
@@ -188,5 +198,5 @@ module.exports = {
   getUsers,
   registerCtrl,
   loginCtrl,
-  getCurrentsession
+  getCurrentsession,
 };

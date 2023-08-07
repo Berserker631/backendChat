@@ -3,13 +3,13 @@ var app = express();
 var bodyParser = require("body-parser");
 var sql = require("mssql");
 var port = process.env.PORT || 8080;
-const cors = require('cors');
+const cors = require("cors");
 
-app.use(cors())
+app.use(cors());
 
 var messagesRoute = require("./routes/messages");
 
-app.listen(port, function () { });
+app.listen(port, function () {});
 
 //
 app.use(bodyParser.urlencoded({ extended: true }));
