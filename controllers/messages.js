@@ -1,9 +1,15 @@
 "use strict";
+<<<<<<< HEAD
 const querys = require("./querys/query");
 const sql = require("mssql");
 const { app } = require("../index");
 // import { getConnection, sql, querys } from "../database";
 // import { encrypt, compare } from "../helpers/handleBcrypt";
+=======
+const querys = require('./querys/query')
+const sql = require('mssql')
+const { app } = require('../index')
+>>>>>>> a6d37ec86612907b9d57f333724d2ea38a21a00a
 
 const getMessages = async (req, res) => {
   let { UserID } = req.body;
@@ -26,17 +32,22 @@ const getMessages = async (req, res) => {
 };
 
 const sendMessage = async (req, res) => {
+<<<<<<< HEAD
   let { Message, UserName, SessionID, ReadMsg, TimeReceived, UserID } =
     req.body;
   // Validating
+=======
+  let { Message, UserName, SessionID, ReadMsg, TimeReceived } = req.body;
+>>>>>>> a6d37ec86612907b9d57f333724d2ea38a21a00a
   if (Message === null || UserName === null) {
     return res.status(400).json({ msg: "Bad Request. Please fill al fields" });
   }
   try {
     const pool = await sql.connect(app);
+    console.log('Enviando mensaje');
     const result = await pool
       .request()
-      .input("Message", sql.Text, Message)
+      .input("Message", sql.NVarChar, Message)
       .input("TimeReceived", sql.VarChar, TimeReceived)
       .input("SessionID", sql.Int, SessionID)
       .input("UserName", sql.VarChar, UserName)
