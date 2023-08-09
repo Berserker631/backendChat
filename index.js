@@ -18,22 +18,14 @@ app.use(bodyParser.json({ limit: "50mb", extended: true }));
 app.use("/", messagesRoute);
 
 const config = {
-  user: "N.aguilar",
-  password: "NA*2023",
+  user: "sa",
+  password: "sa2023",
   database: "DB_CHAT",
   server: "localhost",
   options: {
-    encrypt: true,
-    trustServerCertificate: true,
+    encrypt: true, // for azure
+    trustServerCertificate: true, // change to true for local dev / self-signed certs
   },
-  // user: "sa",
-  // password: "sa2023",
-  // database: "DB_CHAT",
-  // server: "localhost",
-  // options: {
-  //   encrypt: true, // for azure
-  //   trustServerCertificate: true, // change to true for local dev / self-signed certs
-  // },
 };
 
 async function getConnection() {

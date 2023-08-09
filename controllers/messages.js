@@ -26,15 +26,13 @@ const getMessages = async (req, res) => {
 };
 
 const sendMessage = async (req, res) => {
-  let { Message, UserName, SessionID, ReadMsg, TimeReceived, UserID } =
-    req.body;
+  let { Message, UserName, SessionID, ReadMsg, TimeReceived, UserID, TargetID, IsAns } = req.body;
   // Validating
   if (Message === null || UserName === null) {
     return res.status(400).json({ msg: "Bad Request. Please fill al fields" });
   }
   try {
     const pool = await sql.connect(app);
-    console.log("Enviando mensaje");
     const result = await pool
       .request()
       .input("Message", sql.NVarChar, Message)
@@ -43,6 +41,8 @@ const sendMessage = async (req, res) => {
       .input("UserName", sql.VarChar, UserName)
       .input("ReadMsg", sql.Bit, ReadMsg)
       .input("UserID", sql.Int, UserID)
+      .input("TargetID", sql.Int, TargetID)
+      .input("IsAns", sql.Int, IsAns)
       .query(querys.sendMessage);
     res.end();
   } catch (error) {
@@ -140,7 +140,7 @@ const getUsers = async (req, res) => {
 // #endregion
 
 const registerCtrl = async (req, res) => {
-  let { userName, status, type, password, creationDate } = req.body;
+  let { userName, password } = req.body;
   res.json({ userName, status });
   try {
     const pool = await sql.connect(app);
