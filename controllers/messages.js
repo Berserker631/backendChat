@@ -26,7 +26,7 @@ const getMessages = async (req, res) => {
 };
 
 const sendMessage = async (req, res) => {
-  let { Message, UserName, SessionID, ReadMsg, TimeReceived, UserID, TargetID, IsAns } = req.body;
+  let { Message, UserName, SessionID, ReadMsg, TimeReceived, UserID, TargetID, IsAns, AnswerTo } = req.body;
   // Validating
   if (Message === null || UserName === null) {
     return res.status(400).json({ msg: "Bad Request. Please fill al fields" });
@@ -43,6 +43,7 @@ const sendMessage = async (req, res) => {
       .input("UserID", sql.Int, UserID)
       .input("TargetID", sql.Int, TargetID)
       .input("IsAns", sql.Int, IsAns)
+      .input("AnswerTo", sql.VarChar, AnswerTo)
       .query(querys.sendMessage);
     res.end();
   } catch (error) {
