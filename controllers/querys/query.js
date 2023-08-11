@@ -2,7 +2,7 @@ const querys = {
   getAllMessages: "SELECT TOP (30) * FROM Conversations WHERE UserID = @UserID",
   sendMessage:
     "INSERT INTO Conversations (Message, TimeReceived, SessionID, UserName, ReadMsg, UserId, TargetID, IsAns, AnswerTo) VALUES (@Message, CURRENT_TIMESTAMP, @SessionID, @UserName, @ReadMsg, @UserID, @TargetID, @IsAns, @AnswerTo)",
-  getConversation: "SELECT * FROM  Conversations WHERE SessionID = @Session",
+  getConversation: "SELECT * FROM  Conversations WHERE SessionID = @Session ORDER BY TimeReceived ASC",
   countMessages:
     "SELECT COUNT (id) FROM [DB_CHAT].[dbo].[Conversations] WHERE SessionID = @idSession",
   deleteMessage:
