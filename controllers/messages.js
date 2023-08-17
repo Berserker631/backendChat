@@ -35,15 +35,11 @@ const sendMessage = async (req, res) => {
     const pool = await sql.connect(app);
     const result = await pool
       .request()
-      .input("Message", sql.NVarChar, Message)
-      .input("TimeReceived", sql.VarChar, TimeReceived)
-      .input("SessionID", sql.Int, SessionID)
-      .input("UserName", sql.VarChar, UserName)
+      .input("Description", sql.NVarChar, Message)
+      .input("dateLog", sql.VarChar, TimeReceived)
+      .input("idSession", sql.Int, SessionID)
       .input("ReadMsg", sql.Bit, ReadMsg)
       .input("UserID", sql.Int, UserID)
-      .input("TargetID", sql.Int, TargetID)
-      .input("IsAns", sql.Int, IsAns)
-      .input("AnswerTo", sql.VarChar, AnswerTo)
       .query(querys.sendMessage);
     res.end();
   } catch (error) {
@@ -53,7 +49,6 @@ const sendMessage = async (req, res) => {
 };
 
 // #region ChatControllers
-
 const getConversation = async (req, res) => {
   let { Session } = req.body;
   if (Session === 0 || Session === undefined) {
@@ -64,7 +59,8 @@ const getConversation = async (req, res) => {
     const result = await pool
       .request()
       .input("Session", sql.Int, Session)
-      .query(querys.getConversation);
+      .execute(`delivery.SPSAV_DeliveryMessage`)
+      // .query(querys.getConversation);
     res.send(result.recordset);
   } catch (error) {
     res.status(400);
@@ -129,8 +125,8 @@ const getUsers = async (req, res) => {
     const pool = await sql.connect(app);
     const result = await pool
       .request()
-      .input("id", id)
-      .query(querys.getAllUsers);
+      .input("idUser", id)
+      .execute(`delivery.SPSEL_DeliveryUsers`)
     res.json(result.recordset);
   } catch (error) {
     res.status(400);
@@ -139,7 +135,6 @@ const getUsers = async (req, res) => {
 };
 
 // #endregion
-
 const registerCtrl = async (req, res) => {
   let { userName, password } = req.body;
   res.json({ userName, status });
@@ -165,9 +160,9 @@ const loginCtrl = async (req, res) => {
     const pool = await sql.connect(app);
     const result = await pool
       .request()
-      .input("UserName", userName)
+      .input("userName", userName)
       .input("Password", password)
-      .query(querys.login);
+      .execute(`delivery.SPSEL_LoginAuthentication`);
     res.send(result.recordset);
   } catch (error) {
     res.status(404);

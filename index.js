@@ -20,7 +20,7 @@ app.use("/", messagesRoute);
 const config = {
   user: "sa",
   password: "sa2023",
-  database: "DB_CHAT",
+  database: "db_erp",
   server: "localhost",
   options: {
     encrypt: true, // for azure
