@@ -26,21 +26,16 @@ const getMessages = async (req, res) => {
 };
 
 const sendMessage = async (req, res) => {
-  let { Message, UserName, SessionID, ReadMsg, TimeReceived, UserID, TargetID, IsAns, AnswerTo } = req.body;
-  // Validating
-  if (Message === null || UserName === null) {
-    return res.status(400).json({ msg: "Bad Request. Please fill al fields" });
-  }
+  let {description, idSubMessage, idSession, idUser } = req.body;
   try {
     const pool = await sql.connect(app);
     const result = await pool
       .request()
-      .input("Description", sql.NVarChar, Message)
-      .input("dateLog", sql.VarChar, TimeReceived)
-      .input("idSession", sql.Int, SessionID)
-      .input("ReadMsg", sql.Bit, ReadMsg)
-      .input("UserID", sql.Int, UserID)
-      .query(querys.sendMessage);
+      .input("description", sql.NVarChar, description)
+      .input("idSubMessage", sql.Int, idSubMessage)
+      .input("idSession", sql.Int, idSession)
+      .input("idUser", sql.Int, idUser)
+      .execute(`delivery.SPSAV_DeliveryMessage`)
     res.end();
   } catch (error) {
     res.status(500);
@@ -50,17 +45,16 @@ const sendMessage = async (req, res) => {
 
 // #region ChatControllers
 const getConversation = async (req, res) => {
-  let { Session } = req.body;
-  if (Session === 0 || Session === undefined) {
+  let { idSession } = req.body;
+  if (idSession === 0 || idSession === undefined) {
     return res.status(400).json({ msg: "Bad Request there was an error" });
   }
   try {
     const pool = await sql.connect(app);
     const result = await pool
       .request()
-      .input("Session", sql.Int, Session)
-      .execute(`delivery.SPSAV_DeliveryMessage`)
-      // .query(querys.getConversation);
+      .input("idSession", sql.Int, idSession)
+      .execute(`delivery.SPSEL_DeliveryMessagesPerSession`)
     res.send(result.recordset);
   } catch (error) {
     res.status(400);
