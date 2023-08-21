@@ -2,12 +2,95 @@
 const querys = require("./querys/query");
 const sql = require("mssql");
 const { app } = require("../index");
-// import { getConnection, sql, querys } from "../database";
-// import { encrypt, compare } from "../helpers/handleBcrypt";
 
+/**
+* @swagger 
+* components: 
+*  schemas:
+*    Message:
+*     type: array
+*     properties:
+*         idMessage:
+*           type: number
+*           description: the message unique identifier
+*         idMessageSub:
+*           type: number
+*           description: the message answer unique identifier
+*         idSession:
+*           type: number
+*           description: the session unique identifier
+*         idUser:
+*           type: number
+*           description: the user unique identefier
+*         description:
+*           type: string
+*           description: the message body
+*         dateLog:
+*           type: string
+*           description: the message date
+*         userName:
+*           type: string
+*           description: user that sent the message
+*     required:
+*       - idUser
+*     example: 
+*       idUser: 4
+*/
+
+/**
+* @swagger 
+* components: 
+*  schemas:
+*    User:
+*     type: array
+*     properties:
+*        idUser: 
+*           type: number
+*        name:
+*           type: string
+*        lastName:
+*           type: string
+*        alias:
+*           type: string
+*     required:
+*       - idUser
+*     example: 
+*       idUser: 4
+*/
+
+
+/**
+ * @swagger
+ * path:
+ * /getMessages:
+ *   post:
+ *     summary: Obtain conversation
+ *     tags: [Message]
+ *     requestBody:
+ *       required: true
+ *       content: 
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             items:
+ *               $ref: '#/components/schemas/Message'
+ *           example: 
+ *            idUser: 4
+ *     responses:
+ *       200:
+ *         description: messages obtained!
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               items:
+ *                 $ref: '#/components/schemas/Message'
+ *       404:
+ *         description: user not found
+ */
 const getMessages = async (req, res) => {
-  let { UserID } = req.body;
-  if (UserID === null || UserID === 0) {
+  let { idUser } = req.body;
+  if (idUser === null || idUser === 0) {
     return res.status(400).json({ msg: "Something went wrong" });
   }
 
@@ -15,8 +98,8 @@ const getMessages = async (req, res) => {
     const pool = await sql.connect(app);
     const result = await pool
       .request()
-      .input("UserID", UserID)
-      .query(querys.getAllMessages);
+      .input("IdUser", idUser)
+      .execute(`delivery.SPSEL_DeliveryMessagesPerUser`);
     res.json(result.recordset);
     res.end();
   } catch (error) {
@@ -25,6 +108,39 @@ const getMessages = async (req, res) => {
   }
 };
 
+
+/**
+ * @swagger
+ * path:
+ * /sendMessage:
+ *   post:
+ *     summary: Obtain conversation
+ *     tags: [Message]
+ *     requestBody:
+ *       required: true
+ *       content: 
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             items:
+ *               $ref: '#/components/schemas/Message'
+ *           example: 
+ *            description: hello! from swagger
+ *            idSubMessage: null
+ *            idSession: 1
+ *            idUser: 4
+ *     responses:
+ *       200:
+ *         description: messages obtained!
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               items:
+ *                 $ref: '#/components/schemas/Message'
+ *       404:
+ *         description: user not found
+ */
 const sendMessage = async (req, res) => {
   let {description, idSubMessage, idSession, idUser } = req.body;
   try {
@@ -43,6 +159,35 @@ const sendMessage = async (req, res) => {
   }
 };
 
+/**
+ * @swagger
+ * path:
+ * /getConversation:
+ *   post:
+ *     summary: Obtain conversation
+ *     tags: [Message]
+ *     requestBody:
+ *       required: true
+ *       content: 
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             items:
+ *               $ref: '#/components/schemas/Message'
+ *           example: 
+ *            idSession: 8
+ *     responses:
+ *       200:
+ *         description: messages obtained!
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               items:
+ *                 $ref: '#/components/schemas/Message'
+ *       404:
+ *         description: user not found
+ */
 // #region ChatControllers
 const getConversation = async (req, res) => {
   let { idSession } = req.body;
