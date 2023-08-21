@@ -1,7 +1,8 @@
-
-const basicInfo = require('./basicInfo');
-const tags = require('./tags')
+const basicInfo = require("./basicInfo");
+const tags = require("./tags");
+const component = require("./component");
 module.exports = {
-    ...basicInfo,
-    ...tags
+  ...basicInfo,
+  ...tags,
+  ...component,
 };

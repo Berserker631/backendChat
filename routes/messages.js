@@ -19,7 +19,7 @@ api.get("/countMessages/:idSession", messagesController.countMessages);
 
 api.delete("/deleteMessage/:id", messagesController.deleteMessage);
 
-api.put("/updateProduct/:id", messagesController.updateProduct);
+api.put("/updateMessage/:id", messagesController.updateProduct);
 
 api.post("/getUsers", messagesController.getUsers);
 
